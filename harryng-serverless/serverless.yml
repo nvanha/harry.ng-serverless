@@ -1,16 +1,57 @@
 service: harryng-serverless
-frameworkVersion: '3'
+frameworkVersion: "3"
 
 provider:
   name: aws
   stage: dev
   runtime: nodejs16.x
   region: ap-southeast-2
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource:
+        - arn:aws:dynamodb:ap-southeast-2:819809268659:table/WorksTable-dev
 
 functions:
-  hello:
-    handler: handler.hello
+  addWork:
+    handler: src/routes/works/addWork.handler
     events:
-      - httpApi:
-          path: /
+      - http:
+          path: /works/add-work
+          method: post
+  fetchWorks:
+    handler: src/routes/works/fetchWorks.handler
+    events:
+      - http:
+          path: /works/list-works
           method: get
+  fetchWork:
+    handler: src/routes/works/fetchWork.handler
+    events:
+      - http:
+          path: /works/work/{id}
+          method: get
+  deleteWork:
+    handler: src/routes/works/deleteWork.handler
+    events:
+      - http:
+          path: /works/delete-work/{id}
+          method: delete
+
+resources:
+  Resources:
+    WorksTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: WorksTable-dev
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+
+plugins:
+  - serverless-offline
