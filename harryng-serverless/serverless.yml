@@ -11,7 +11,7 @@ provider:
       Action:
         - dynamodb:*
       Resource:
-        - arn:aws:dynamodb:ap-southeast-2:819809268659:table/WorksTable-dev
+        - arn:aws:dynamodb:ap-southeast-2:819809268659:table/WorksTable-${self:provider.stage}
 
 functions:
   addWork:
@@ -44,7 +44,7 @@ resources:
     WorksTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: WorksTable-dev
+        TableName: WorksTable-${self:provider.stage}
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: id
