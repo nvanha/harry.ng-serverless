@@ -3,6 +3,7 @@ frameworkVersion: '3'
 
 provider:
   name: aws
+  stage: dev
   runtime: nodejs16.x
   region: ap-southeast-2
 
