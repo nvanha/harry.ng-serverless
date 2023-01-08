@@ -3,7 +3,7 @@ frameworkVersion: "3"
 
 provider:
   name: aws
-  stage: dev
+  stage: prod
   runtime: nodejs16.x
   region: ap-southeast-2
   iamRoleStatements:
@@ -11,7 +11,7 @@ provider:
       Action:
         - dynamodb:*
       Resource:
-        - arn:aws:dynamodb:ap-southeast-2:819809268659:table/WorksTable-dev
+        - arn:aws:dynamodb:ap-southeast-2:819809268659:table/WorksTable-prod
 
 functions:
   addWork:
@@ -44,7 +44,7 @@ resources:
     WorksTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: WorksTable-dev
+        TableName: WorksTable-prod
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: id
