@@ -2,8 +2,6 @@ const AWS = require("aws-sdk");
 const middy = require("@middy/core");
 const httpJsonBodyParser = require("@middy/http-json-body-parser");
 
-require("dotenv").config();
-
 const deleteWork = async (event) => {
   const dynamodb = new AWS.DynamoDB.DocumentClient();
 
@@ -11,14 +9,14 @@ const deleteWork = async (event) => {
 
   await dynamodb
     .delete({
-      TableName: `WorksTable-${process.env.CURRENT_ENV}`,
+      TableName: "WorksTable",
       Key: { id },
     })
     .promise();
 
   return {
     statusCode: 201,
-    body: JSON.stringify({ message: "Work Deleted" }),
+    body: JSON.stringify({ message: "Work Deleted", id }),
   };
 };
 

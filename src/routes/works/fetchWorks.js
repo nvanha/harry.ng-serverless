@@ -1,7 +1,5 @@
 const AWS = require("aws-sdk");
 
-require("dotenv").config();
-
 const fetchWorks = async () => {
   const dynamodb = new AWS.DynamoDB.DocumentClient();
 
@@ -10,7 +8,7 @@ const fetchWorks = async () => {
   try {
     const results = await dynamodb
       .scan({
-        TableName: `WorksTable-${process.env.CURRENT_ENV}`,
+        TableName: "WorksTable",
       })
       .promise();
     worksList = results.Items;

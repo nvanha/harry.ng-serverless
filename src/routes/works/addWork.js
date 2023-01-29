@@ -3,8 +3,6 @@ const AWS = require("aws-sdk");
 const middy = require("@middy/core");
 const httpJsonBodyParser = require("@middy/http-json-body-parser");
 
-require("dotenv").config();
-
 const addWork = async (event) => {
   const dynamodb = new AWS.DynamoDB.DocumentClient();
 
@@ -36,7 +34,7 @@ const addWork = async (event) => {
 
   await dynamodb
     .put({
-      TableName: `WorksTable-${process.env.CURRENT_ENV}`,
+      TableName: "WorksTable",
       Item: newWork,
     })
     .promise();

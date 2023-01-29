@@ -10,8 +10,9 @@ provider:
     - Effect: Allow
       Action:
         - dynamodb:*
+        - s3:*
       Resource:
-        - arn:aws:dynamodb:ap-southeast-2:819809268659:table/WorksTable-${self:provider.stage}
+        - arn:aws:dynamodb:ap-southeast-2:819809268659:table/WorksTable
 
 functions:
   addWork:
@@ -30,7 +31,7 @@ functions:
     handler: src/routes/works/fetchWork.handler
     events:
       - http:
-          path: /works/work/{id}
+          path: /works/work-detail/{id}
           method: get
   deleteWork:
     handler: src/routes/works/deleteWork.handler
@@ -38,13 +39,31 @@ functions:
       - http:
           path: /works/delete-work/{id}
           method: delete
+  uploadImageWork:
+    handler: src/routes/works/uploadImageWork.handler
+    events:
+      - http:
+          path: /works/upload-image-work
+          method: post
+  deleteImageWork:
+    handler: src/routes/works/deleteImageWork.handler
+    events:
+      - http:
+          path: /works/delete-image-work/{fileKey}
+          method: delete
+  updateWork:
+    handler: src/routes/works/updateWork.handler
+    events:
+      - http:
+          path: /works/update-work
+          method: post
 
 resources:
   Resources:
     WorksTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: WorksTable-${self:provider.stage}
+        TableName: WorksTable
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: id
