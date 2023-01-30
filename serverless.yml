@@ -1,18 +1,27 @@
-service: harryng-serverless
+service: ${self:custom.repoName}
 frameworkVersion: "3"
+
+custom:
+  repoName: harryng-serverless
+  currentEnvVersion: nodejs16.x
+  currentStage: dev
+  currentRegion: ap-southeast-2
+  worksTableItem: WorksTable
+  homePageBucketName: harry.ng-homepage
 
 provider:
   name: aws
-  stage: dev
-  runtime: nodejs16.x
-  region: ap-southeast-2
+  runtime: ${self:custom.currentEnvVersion}
+  region: ${self:custom.currentRegion}
+  stage: ${self:custom.currentStage}
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:*
         - s3:*
       Resource:
-        - arn:aws:dynamodb:ap-southeast-2:819809268659:table/WorksTable
+        - arn:aws:dynamodb:${self:custom.currentRegion}:819809268659:table/${self:custom.worksTableItem}
+        - arn:aws:s3:::${self:custom.homePageBucketName}
 
 functions:
   addWork:
@@ -63,7 +72,7 @@ resources:
     WorksTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: WorksTable
+        TableName: ${self:custom.worksTableItem}
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: id
