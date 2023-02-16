@@ -2,7 +2,7 @@ const AWS = require("aws-sdk");
 const middy = require("@middy/core");
 const httpJsonBodyParser = require("@middy/http-json-body-parser");
 
-const updateWork = async (event) => {
+const commentWork = async (event) => {
   const dynamodb = new AWS.DynamoDB.DocumentClient();
 
   const { id, content } = event.body;
@@ -23,7 +23,7 @@ const updateWork = async (event) => {
 
   const commentListOld = workItem.commentsList || [];
 
-  const commentListNew = [...commentListOld, commentItem];
+  const commentListNew = [commentItem, ...commentListOld];
 
   await dynamodb
     .update({
@@ -49,5 +49,5 @@ const updateWork = async (event) => {
 };
 
 module.exports = {
-  handler: middy(updateWork).use(httpJsonBodyParser()),
+  handler: middy(commentWork).use(httpJsonBodyParser()),
 };
