@@ -66,6 +66,12 @@ functions:
       - http:
           path: /works/update-work
           method: post
+  commentWork:
+    handler: src/routes/works/commentWork.handler
+    events:
+      - http:
+          path: /works/comment-work
+          method: post
 
 resources:
   Resources:
