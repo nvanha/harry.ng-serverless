@@ -1,11 +1,9 @@
 const AWS = require("aws-sdk");
-const middy = require("@middy/core");
-const httpJsonBodyParser = require("@middy/http-json-body-parser");
 
 const commentWork = async (event) => {
   const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-  const { id, content } = event.body;
+  const { id, content } = JSON.parse(event.body);
 
   const commentItem = {
     content,
@@ -49,5 +47,5 @@ const commentWork = async (event) => {
 };
 
 module.exports = {
-  handler: middy(commentWork).use(httpJsonBodyParser()),
+  handler: commentWork,
 };
